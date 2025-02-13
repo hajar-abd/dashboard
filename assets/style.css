@@ -144,7 +144,7 @@ body {
 .number-card-title {
     font-size: 1.5rem; /* Taille du texte ajustée pour s'adapter */
     font-weight: bold; /* Texte en gras */
-    color: #4A4A4A; /* Couleur sombre */
+    color: #027699; /* Couleur sombre */
     margin-bottom: 5px; /* Espacement réduit avec le sous-titre */
 }
 
@@ -294,3 +294,4 @@ body {
 .tab:hover {
     background-color: ;
 }
+
