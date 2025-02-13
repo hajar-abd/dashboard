@@ -125,8 +125,8 @@ fig_box_duration = px.box(
 )
 
 fig_box_duration.update_layout(
-    plot_bgcolor='rgba(255,255,255,1)',   # fond transparent rgba(255,255,255,1)
-    paper_bgcolor='rgba(255,255,255,1)',  # fond transparent
+    plot_bgcolor='rgba(0,0,0,0)',   # fond transparent
+    paper_bgcolor='rgba(0,0,0,0)',  # fond transparent
     font=dict(family="Arial", size=9, color="#333"),
     title_x=0.5,  # centrage du titre
     height=300,  # Hauteur réduite
@@ -135,7 +135,7 @@ fig_box_duration.update_layout(
 )
 
 fig_box_duration.update_yaxes(range=[0, 20], title="Duration in years")  # Plage et titre de l'axe Y
-fig_box_duration.update_traces(marker=dict(color='#027699'))  # Garde la même couleur bleue que le graphique linéaire
+fig_box_duration.update_traces(marker=dict(color='#007BA7'))  # Garde la même couleur bleue que le graphique linéaire
 
 ######################################
 drug_pourcentage = round(len(df_trials[df_trials.drug_FDA == True])*100/(len(df_trials[df_trials.drug_FDA == True]) + len(df_trials[df_trials.drug_FDA == False])),1)
