@@ -45,12 +45,13 @@ navbar = html.Div(
             href="https://gitlab.com/hajar.abdaoui/oncotrial_tracker",
             target="_blank",
             children=html.Img(
-                src="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png",
+                src="/assets/github-mark-white.png",
                 className="gitlab-icon"
             )
         )
     ]
 )
+
 
 
 # tabs = html.Div(
@@ -84,6 +85,12 @@ tabs = html.Div(
                 dcc.Tab(
                     label="Table",
                     value="tab-table",
+                    className="tab",
+                    selected_className="tab active"
+                ),
+                dcc.Tab(
+                    label="About",
+                    value="tab-about",
                     className="tab",
                     selected_className="tab active"
                 ),
@@ -193,9 +200,9 @@ def update_graph(selected_category):
         top_10_df,
         x='neoplasm',
         y='count',
-        labels={'neoplasm': 'Classe de Néoplasme', 'count': "Nombre d'Études"},
-        title=f"Les 10 Néoplasmes les Plus Étudiés ({selected_category})",
-        color_discrete_sequence=["#1f77b4"]  # Même bleu que le boxplot
+        labels={'neoplasm': 'Neoplasm class', 'count': "Number of studies"},
+        title=f"The 10 most studied neoplasms ({selected_category})",
+        color_discrete_sequence=["#027699"]  # Même bleu que le boxplot
     )
 
     # Mise en forme harmonisée
@@ -421,6 +428,95 @@ content2 = dbc.Container([
 ], fluid=True)
 
 
+############################################################################################
+
+content3 = dbc.Container(
+    [
+        html.H5("About", className="text-center my-4 fw-bold text-primary"),
+
+        # Une seule carte pour contenir tout le contenu
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    # Section Contexte
+                    html.H6("Context", className="fw-bold text-secondary"),
+                    html.P(
+                        '''The OncoTrials Tracker application presented here was developed as part of the web scraping course, 
+                        with the aim of facilitating the analysis and exploration of clinical trials listed in the 
+                        ClinicalTrials.gov database. The trials concern cancers listed in France.''',
+                        style={"text-align": "justify", "font-size": "0.8rem"}
+                    ),
+                    html.Hr(),  # Ligne séparatrice
+
+                    # Section Objectifs du projet
+                    html.H6("Project objectives", className="fw-bold text-secondary"),
+                    html.Ul(
+                        [
+                            html.Li("Centralize and visualize data on clinical trials in France."),
+                            html.Li("Provide an interactive tool for exploring studies by organ, type of intervention or trial status."),
+                            html.Li("Provide graphical analyses to improve understanding of clinical trials."),
+                            html.Li("Help healthcare professionals and researchers identify opportunities and keep abreast of the latest trends and advances in the field.")
+                        ],
+                        style={"font-size": "0.8rem", "text-align": "justify"}
+                    ),
+                    html.Hr(),
+
+                    # Section Sources des données
+                    html.H6("Data sources", className="fw-bold text-secondary"),
+                    html.P(
+                        '''The data used in this project comes from the ClinicalTrials.gov public API. 
+                        Using web scraping scripts, the data was collected, cleaned and integrated into a database. 
+                        The application then presents this information intuitively and interactively through an interface built with Dash (or other).''',
+                        style={"text-align": "justify", "font-size": "0.8rem"}
+                    ),
+                    html.Hr(),
+
+                    # Section Comment ça fonctionne ?
+                    html.H6("How it works ?", className="fw-bold text-secondary"),
+                    html.P(
+                        '''Clinical trials are extracted and organized into several categories. This data is processed to provide a clear 
+                        visualization, with sorting and search options.''',
+                        style={"text-align": "justify", "font-size": "0.8rem"}
+                    ),
+                    html.P(
+                        '''The project uses data manipulation techniques and interactive visualization tools to meet the needs of end-users.''',
+                        style={"text-align": "justify", "font-size": "0.8rem"}
+                    ),
+                    html.Hr(),
+
+                    # Section À qui s'adresse ce projet ?
+                    html.H6("Who is this project for?", className="fw-bold text-secondary"),
+                    html.Ul(
+                        [
+                            html.Li("Healthcare professionals seeking an overview of clinical trials in France."),
+                            html.Li("Researchers working on the development of new therapies."),
+                            html.Li("Institutions involved in monitoring clinical trials.")
+                        ],
+                        style={"font-size": "0.8rem", "text-align": "justify"}
+                    ),
+                    html.Hr(),
+
+                    # Section Équipe et développement
+                    html.H6("Team and development", className="fw-bold text-secondary"),
+                    html.P(
+                        '''This project was created by ..., as part of the Master Data Science en Santé program at the University of Lille (ILIS). 
+                        It is based on data extracted via the ClinicalTrials.gov API, and was presented during the web scraping course taught by Mr. Djamel ZITOUNI.''',
+                        style={"text-align": "justify", "font-size": "0.8rem"}
+                    ),
+                    html.P(
+                        '''The application is an information tool, and the data it synthesizes should not be used for medical or legal decisions.''',
+                        style={"text-align": "justify", "font-size": "0.8rem"}
+                    )
+                ]
+            ),
+            className="shadow-sm p-4 mb-4 bg-white rounded"  # Style de la carte
+        )
+    ],
+    fluid=True
+)
+
+
+
 ######################################
 # app.layout = html.Div([
 #     dcc.Location(id="url"),
@@ -435,7 +531,9 @@ def render_content(tab):
         return content
     elif tab == 'tab-table':
         return content2
-    return content  # default tab
+    elif tab == 'tab-about':  # Condition pour "À propos"
+        return content3
+    return content  # Par défaut
 
 app.layout = html.Div(
     className="main-container",
@@ -453,8 +551,6 @@ app.layout = html.Div(
         )
     ]
 )
-
-
 
 if __name__ == '__main__':
     app.run_server(host="0.0.0.0", port=5000, debug=True)
