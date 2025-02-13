@@ -93,66 +93,55 @@ tabs = html.Div(
 )
 
 ######################################
-# Supprimez les définitions de fig_year_count et fig_box_duration du début du code
+######################################
+study_counts = df_trials.groupby('startYear').size().reset_index(name='count')
 
-# Ajoutez ces callbacks
-@app.callback(
-    Output('study-year-graph', 'figure'),
-    Input('tabs', 'value')
+fig_year_count = px.line(
+    study_counts,
+    x='startYear',
+    y='count',
+    labels={'startYear': 'Year', 'count': 'Studies'},
+    title='Studies Started Each Year',
+    markers=True,  # Ajoute des points sur la ligne
+    color_discrete_sequence=['#007BA7']  # Couleur principale (bleu Bootstrap)
 )
-def update_year_count(tab):
-    study_counts = df_trials.groupby('startYear').size().reset_index(name='count')
-    
-    fig = px.line(
-        study_counts,
-        x='startYear',
-        y='count',
-        labels={'startYear': 'Year', 'count': 'Studies'},
-        title='Studies Started Each Year',
-        markers=True,
-        color_discrete_sequence=['#007BA7']
-    )
 
-    fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(family="Arial", size=9, color="#333"),
-        title_x=0.5,
-        margin=dict(l=20, r=20, t=40, b=20),
-        hovermode="x unified"
-    )
+fig_year_count.update_layout(
+    plot_bgcolor='rgba(0,0,0,0)',   #fond transparent
+    paper_bgcolor='rgba(0,0,0,0)',  #fond transparent
+    font=dict(family="Arial", size=9, color="#333"),
+    title_x=0.5,  #centrage du titre
+    margin=dict(l=20, r=20, t=40, b=20),
+    hovermode="x unified",   #survol des points
 
-    fig.update_xaxes(range=[1990, 2027])
-    return fig
-
-@app.callback(
-    Output('study-duration-graph', 'figure'),
-    Input('tabs', 'value')
 )
-def update_box_duration(tab):
-    completed = df_trials[df_trials["status"]=="Completed"]
-    
-    fig = px.box(
-        completed,
-        y="duration_year",
-        title="Duration of completed studies",
-        labels={"Years"},
-        color_discrete_sequence=["#007BA7"]
-    )
 
-    fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(family="Arial", size=9, color="#333"),
-        title_x=0.5,
-        height=300,
-        width=400,
-        margin=dict(l=50, r=50, t=30, b=50)
-    )
 
-    fig.update_yaxes(range=[0, 20], title="Duration in years")
-    fig.update_traces(marker=dict(color='#007BA7'))
-    return fig
+fig_year_count.update_xaxes(range=[1990, 2027])
+
+######################################
+completed = df_trials[df_trials["status"]=="Completed"]#.dropna(subset=["duration_year"])
+
+fig_box_duration = px.box(
+    completed,
+    y="duration_year",
+    title="Duration of completed studies",
+    labels={"Years"},
+    color_discrete_sequence=["#007BA7"]  # Couleur principale (bleu Bootstrap)
+)
+
+fig_box_duration.update_layout(
+    plot_bgcolor='rgba(0,0,0,0)',   # fond transparent rgba(255,255,255,1)
+    paper_bgcolor='rgba(0,0,0,0)',  # fond transparent
+    font=dict(family="Arial", size=9, color="#333"),
+    title_x=0.5,  # centrage du titre
+    height=300,  # Hauteur réduite
+    width=400,   # Largeur standard
+    margin=dict(l=50, r=50, t=30, b=50) 
+)
+
+fig_box_duration.update_yaxes(range=[0, 20], title="Duration in years")  # Plage et titre de l'axe Y
+fig_box_duration.update_traces(marker=dict(color='#007BA7'))  # Garde la même couleur bleue que le graphique linéaire
 
 ######################################
 drug_pourcentage = round(len(df_trials[df_trials.drug_FDA == True])*100/(len(df_trials[df_trials.drug_FDA == True]) + len(df_trials[df_trials.drug_FDA == False])),1)
@@ -269,11 +258,10 @@ content = dbc.Container(
                 dbc.Card(
                     dbc.CardBody(
                         dbc.Spinner(
-                            dcc.Graph(id='study-year-graph',
-                                      style={"width": "100%", "height": "150px", "margin": "-25px"}
-                            ),
+                            dcc.Graph(id='study-year-graph', figure=fig_year_count,
+                                      style={"width": "100%", "height": "150px", "margin": "-25px"}),
                             color="primary"
-                        ),
+                        )
                     ),
                     className="shadow-sm p-3 mb-4 bg-white rounded",
                     style={"width": "100%"}
@@ -285,11 +273,10 @@ content = dbc.Container(
                 dbc.Card(
                     dbc.CardBody(
                         dbc.Spinner(
-                            dcc.Graph(id='study-duration-graph',
-                                      style={"width": "100%", "margin": "0", "margin-top": "30px", "margin-right": "-10px"}
-                                     ),
+                            dcc.Graph(id='study-duration-graph', figure=fig_box_duration,
+                                      style={"width": "100%", "margin": "0", "margin-top": "30px", "margin-right": "-10px"}),
                             color="primary"
-                        ),
+                        )
                     ),
                     className="shadow-sm p-3 mb-4 bg-white rounded",
                     style={"width": "100%", "height": "315px", "margin-top": "-75px", "justify-content": "center", "align-items": "center"}
