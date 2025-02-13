@@ -5,13 +5,18 @@ from dash import dash_table, html, dcc
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
-###########################################################################################################################################
-df_trials = pd.read_csv("trials.csv")
-df_mesh = pd.read_csv("mesh.csv")
-df_loc = pd.read_csv("loc.csv")
-###########################################################################################################################################
 import zipfile
 import os
+###########################################################################################################################################
+# Obtenez le chemin absolu du répertoire contenant le script
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Chargez les fichiers en utilisant les chemins absolus
+df_trials = pd.read_csv(os.path.join(BASE_DIR, "trials.csv"))
+df_mesh = pd.read_csv(os.path.join(BASE_DIR, "mesh.csv"))
+df_loc = pd.read_csv(os.path.join(BASE_DIR, "loc.csv"))
+###########################################################################################################################################
+
 
 def unzip_and_load(file_path, extract_to='.'):
     with zipfile.ZipFile(file_path, 'r') as zip_ref:
