@@ -1,4 +1,4 @@
-dash==2.11.0
-dash-bootstrap-components==1.4.0
-pandas==2.2.3
-plotly==5.17.0
+dash==2.11.1
+dash-bootstrap-components==1.4.1
+pandas>=2.2.0
+plotly>=5.11.0

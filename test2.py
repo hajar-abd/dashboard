@@ -25,7 +25,7 @@ xml_file_path = unzip_and_load('desc2024.zip')
 #creation de l'application dash avec le theme Cerulean 
 app = dash.Dash(
     "oncoTrials",
-    external_stylesheets=[dbc.themes.LUMEN, "/src/style.css"],
+    external_stylesheets=[dbc.themes.LUMEN, "/assets/style.css"],
     suppress_callback_exceptions=True
 )
 
@@ -451,6 +451,6 @@ app.layout = html.Div(
 
 
 if __name__ == '__main__':
-    app.run_server(host="0.0.0.0", port=5000, debug=True)
+    app.run_server(debug=True)
 
 
